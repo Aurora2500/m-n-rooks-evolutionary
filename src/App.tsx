@@ -3,6 +3,9 @@ import rookImage from './assets/rook.svg';
 
 import {crossUniform, mutFlipBit, selTournament, evolveSimple} from 'eugenics';
 
+const NUM_POP = 150;
+const NUM_GENS = 200;
+
 function App() {
 	const [size, setSize] = useState(5);
 
@@ -50,14 +53,14 @@ function App() {
 			return pieces.length - overlap*m
 		}
 
-		const population = repeat(50, () => repeat(m, () => Math.random() > 0.5));
+		const population = repeat(NUM_POP, () => repeat(m, () => Math.random() > 0.5));
 		const {population: solution, fitnesses: solFitness} = evolveSimple(population, {
 			fitness,
 			crossover: crossUniform(0.2),
 			mutation: mutFlipBit(0.05),
 			selection: selTournament,
 		}, {
-			ngen: 20,
+			ngen: NUM_GENS,
 		});
 		const [best, _] = solution.reduce<[boolean[], number]>(
 			([best, best_fit]: [boolean[], number], x, i) => best_fit < solFitness[i]? [x, solFitness[i]]:[best, best_fit],
